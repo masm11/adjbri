@@ -53,6 +53,11 @@ adjbri.rb 1,25%,50%
 テストが終わったら、自分の環境に合わせて、
 自動起動するようにしておくと良いでしょう。
 
+## `/sys/class/backlight/*/brightness` が open できない場合
+
+同梱の `99-backlight-intel_backlight.rules` を適宜修正して `/etc/udev/rules.d/`
+にコピーすると良いでしょう。OS の reboot が必要かもしれません。
+
 ## 輝度が上がったり下がったりする場合
 
 他に輝度を調整するプログラムが動いているのかもしれません。
