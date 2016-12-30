@@ -14,33 +14,39 @@ end
 brightnesses = ARGV[0].split(',')
 
 icon = Gtk::StatusIcon.new
-icon.icon_name = 'network-error'
+icon.icon_name = 'display'
 icon.tooltip_text = 'Brightness'
 
-min = 1
-max = 1
+@max = 1
 open(MAX_BRIGHTNESS_PATH) do |f|
-  max = f.readline.strip.to_i
+  @max = f.readline.strip.to_i
 end
 
-@cur = min
+@cur = @max
 open(BRIGHTNESS_PATH) do |f|
   @cur = f.readline.strip.to_i
 end
 
+def brightness_to_value(str)
+  return @max * str.to_i / 100 if str =~ /%$/
+  return str.to_i
+end
+
 menu = Gtk::Menu.new
 brightnesses.each do |str|
-  item = Gtk::MenuItem.new(str.to_s)
+  str = str.to_s
+  item = Gtk::MenuItem.new(str)
   item.signal_connect('activate') do |w|
-    brightness = w.label
-    if brightness =~ /%$/
-      brightness = max * brightness.to_i / 100
-    end
-    @cur = brightness.to_i
+    @cur = brightness_to_value w.label
     set_brightness
+    icon.tooltip_text = "Brightness #{w.label}"
   end
   item.show
   menu.add item
+  
+  if brightness_to_value(str) == @cur
+    icon.tooltip_text = "Brightness #{str}"
+  end
 end
 
 icon.signal_connect('popup_menu') do |w, btn, time|
