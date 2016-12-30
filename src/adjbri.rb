@@ -5,7 +5,7 @@ require 'gtk3'
 BRIGHTNESS_PATH = '/sys/class/backlight/intel_backlight/brightness'
 MAX_BRIGHTNESS_PATH = '/sys/class/backlight/intel_backlight/max_brightness'
 
-if ARGV[0].nil?
+if ARGV[0].nil? || ARGV[0] == '--help'
   puts "Usage: #{$0} <brightness[,...]>"
   puts "Example:"
   puts "  #{$0} 1,25%,50%"
